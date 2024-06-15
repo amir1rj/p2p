@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Order Details</title>
+</head>
+<body>
+<!-- Display messages to the user -->
+{% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+{% endif %}
+<h1>Order Details</h1>
+<p>Product: {{ order.product.title }}</p>
+<p>Quantity: {{ order.quantity }}</p>
+<p>Total Price: ${{ order.total_price }}</p>
+<p>Status: {{ order.get_status_display }}</p>
+
+
+<form method="post" action="{% url 'orders:detail' order.id %}">
+    {% csrf_token %}
+    {#        <input type="hidden" name="status" value="confirmed">#}
+    {#        <button type="submit">Confirm Order</button>#}
+    {% if order.status == "pending" %}
+        <button type="submit" name="action" value="confirmed">confirm</button>
+    {% endif %}
+    {% if order.status == "approved" %}
+        <button type="submit" name="action" value="completed">complete order</button>
+    {% endif %}
+</form>
+
+{% if order.status == "confirmed" %}
+    <form method="post" action="{% url 'orders:cancel_order' order.id %}">
+        {% csrf_token %}
+        <button type="submit">Cancel Order</button>
+    </form>
+{% endif %}
+</body>

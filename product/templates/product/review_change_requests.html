@@ -1,0 +1,19 @@
+<!-- templates/admin/review_change_requests.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Review Change Requests</title>
+</head>
+<body>
+    <h2>Review Change Requests</h2>
+    <ul>
+        {% for request in change_requests %}
+        <li>
+            <p>{{ request.product.title }} - {{ request.vendor.user.username }}</p>
+            <a href="{% url 'approve_change_request' request.pk %}">Approve</a>
+            <a href="{% url 'reject_change_request' request.pk %}">Reject</a>
+        </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

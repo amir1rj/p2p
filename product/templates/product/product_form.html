@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Create Product</title>
+</head>
+<body>
+    <h2>Create Product</h2>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <h3>Product Information</h3>
+        {{ information_formset.management_form }}
+        {% for form in information_formset %}
+            {{ form.as_p }}
+        {% endfor %}
+        <button type="submit">Create Product</button>
+    </form>
+</body>
+</html>

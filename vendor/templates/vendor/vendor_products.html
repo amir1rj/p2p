@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Products</title>
+</head>
+<body>
+    <h2>My Products</h2>
+    <ul>
+        {% for product in object_list %}
+            <li>{{ product.title }} - {{ product.status }}</li>
+        {% endfor %}
+    </ul>
+    <a href="{% url 'create_product' %}">Create New Product</a>
+</body>
+</html>

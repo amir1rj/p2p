@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Confirm Order</title>
+</head>
+<body>
+<h1>Order Details</h1>
+<p>Product: {{ order.product.title }}</p>
+<p>Quantity: {{ order.quantity }}</p>
+<p>Total Price: ${{ order.total_price }}</p>
+<p>Status: {{ order.get_status_display }}</p>
+
+<form method="post" action="{% url 'vendor:confirm_order' order.id %}">
+    {% csrf_token %}
+    <label for="finalize_day">Finalization Date (in days):</label>
+    <input type="number" name="finalize_day" id="finalize_day" required>
+    <button type="submit" name="action" value="approve">Approve</button>
+    <button type="submit" name="action" value="reject">Reject</button>
+</form>
+
+</body>
+</html>

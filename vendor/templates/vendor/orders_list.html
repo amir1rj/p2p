@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Vendor Orders</title>
+</head>
+<body>
+<h1>Confirmed Orders</h1>
+<table>
+    <thead>
+        <tr>
+            <th>Order ID</th>
+            <th>Product</th>
+            <th>Quantity</th>
+            <th>Total Price</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for order in orders %}
+        <tr>
+            <td>{{ order.id }}</td>
+            <td>{{ order.product.title }}</td>
+            <td>{{ order.quantity }}</td>
+            <td>${{ order.total_price }}</td>
+            <td>
+                <a href="{% url 'vendor:confirm_order' order.id %}">Approve/Reject</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+</body>
+</html>

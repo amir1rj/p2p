@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ product.title }}</title>
+</head>
+<body>
+<h1>{{ product.title }}</h1>
+<p>{{ product.description }}</p>
+<p>Price: ${{ product.price }}</p>
+<p>Status: {{ product.get_status_display }}</p>
+<p>Quantity: {{ product.quantity }}</p>
+<p>Category:
+    {% for category in product.category.all %}{{ category.title }}{% if not forloop.last %}, {% endif %}{% endfor %}</p>
+<p>Unit: {{ product.unit.title }}</p>
+<p>Source: {{ product.src.title }}</p>
+<p>Destination: {{ product.dst.title }}</p>
+
+<h2>Additional Information</h2>
+<ul>
+    {% for info in product.information.all %}
+        <li>{{ info.text }}</li>
+    {% endfor %}
+</ul>
+
+<h2>Images</h2>
+<div>
+    {% for image in product.images.all %}
+        <img src="{{ image.image.url }}" alt="{{ product.title }}">
+    {% endfor %}
+</div>
+<h2>Order this product</h2>
+<form method="post" action="{% url 'orders:create' product.id %}">
+    {% csrf_token %}
+    <label for="quantity">Quantity:</label>
+    <input type="number" name="quantity" id="quantity" min="1" max="{{ product.quantity }}">
+    <button type="submit">Create Order</button>
+</form>
+
+</body>
+</html>

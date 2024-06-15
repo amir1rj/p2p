@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Apply for Seller</title>
+</head>
+<body>
+    <h2>Apply for Vendor</h2>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Apply</button>
+    </form>
+</body>
+</html>

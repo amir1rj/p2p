@@ -1,0 +1,219 @@
+<header class="container-fluid p-0 header" id="header">
+    <div class="row m-0 w-100 justify-content-center">
+        <div class="col-12 p-0">
+            <nav class="navbar navbar-expand-lg navbar-light-bg px-0 px-md-3 py-md-3">
+                <div class="container-fluid">
+                    <button data-mdb-collapse-init class="navbar-toggler nav-mobile-btn p-0" type="button"
+                        data-mdb-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false"
+                        aria-label="Toggle navigation">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                            <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                            <g id="SVGRepo_iconCarrier">
+                                <path d="M20 7L4 7" stroke="#1C274C" stroke-width="1.5" stroke-linecap="round">
+                                </path>
+                                <path opacity="0.5" d="M20 12L4 12" stroke="#1C274C" stroke-width="1.5"
+                                    stroke-linecap="round"></path>
+                                <path d="M20 17L4 17" stroke="#1C274C" stroke-width="1.5" stroke-linecap="round">
+                                </path>
+                            </g>
+                        </svg>
+                    </button>
+                    <a class="navbar-brand d-flex d-lg-none m-0">
+                        حسابداری
+                    </a>
+                    {% if request.user.is_authenticated %}
+                    <!-- Avatar -->
+                    <div class="dropdown profile-dropdown d-flex d-lg-none">
+                        <a data-mdb-dropdown-init class="dropdown-toggle d-flex align-items-center hidden-arrow gap-1"
+                            href="#" id="navbarDropdownMenuAvatar" role="button" aria-expanded="false">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                                <g id="SVGRepo_iconCarrier">
+                                    <circle opacity="0.5" cx="12" cy="9" r="3" stroke="#1C274C" stroke-width="1.5">
+                                    </circle>
+                                    <circle cx="12" cy="12" r="10" stroke="#1C274C" stroke-width="1.5"></circle>
+                                    <path opacity="0.5"
+                                        d="M17.9691 20C17.81 17.1085 16.9247 15 11.9999 15C7.07521 15 6.18991 17.1085 6.03076 20"
+                                        stroke="#1C274C" stroke-width="1.5" stroke-linecap="round"></path>
+                                </g>
+                            </svg>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuAvatar">
+                            <span class="profile-username">{{ request.user.username }}</span>
+                            <li>
+                                <a class="dropdown-item" href="{% url 'logout' %}">خروج</a>
+                            </li>
+                        </ul>
+                    </div>
+                    {% endif %}
+                    <!-- Collapsible wrapper -->
+                    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                        <!-- Navbar brand -->
+                        <a class="navbar-brand mt-2 mt-lg-0 d-none d-lg-flex">
+                            حسابداری
+                        </a>
+                        <!-- Left links -->
+                        <ul class="navbar-nav me-auto mb-lg-0">
+                            <li class="nav-item {% if current_view == 'home' %}active{% endif %}">
+                                <a class="nav-link" href="{% url 'transaction_list' %}">
+                                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                        <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round">
+                                        </g>
+                                        <g id="SVGRepo_iconCarrier">
+                                            <circle cx="9" cy="6" r="4" stroke="#1C274C" stroke-width="1.5">
+                                            </circle>
+                                            <path opacity="0.5"
+                                                d="M12.5 4.3411C13.0375 3.53275 13.9565 3 15 3C16.6569 3 18 4.34315 18 6C18 7.65685 16.6569 9 15 9C13.9565 9 13.0375 8.46725 12.5 7.6589"
+                                                stroke="#1C274C" stroke-width="1.5"></path>
+                                            <ellipse cx="9" cy="17" rx="7" ry="4" stroke="#1C274C" stroke-width="1.5">
+                                            </ellipse>
+                                            <path opacity="0.5"
+                                                d="M18 14C19.7542 14.3847 21 15.3589 21 16.5C21 17.5293 19.9863 18.4229 18.5 18.8704"
+                                                stroke="#1C274C" stroke-width="1.5" stroke-linecap="round"></path>
+                                        </g>
+                                    </svg>
+                                    <span>مدیریت صندوق‌ها</span>
+                                </a>
+                            </li>
+                            <li class="nav-item {% if current_view == 'create_bucket' %}active{% endif %}">
+                                <a class="nav-link " href="{% url 'create_bucket' %}">
+                                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                        <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round">
+                                        </g>
+                                        <g id="SVGRepo_iconCarrier">
+                                            <circle cx="12" cy="6" r="4" stroke="#1C274C" stroke-width="1.5">
+                                            </circle>
+                                            <circle cx="17" cy="18" r="4" stroke="#1C274C" stroke-width="1.5">
+                                            </circle>
+                                            <path d="M17 16.6667V19.3333" stroke="#1C274C" stroke-width="1.5"
+                                                stroke-linecap="round" stroke-linejoin="round"></path>
+                                            <path d="M15.6665 18L18.3332 18" stroke="#1C274C" stroke-width="1.5"
+                                                stroke-linecap="round" stroke-linejoin="round"></path>
+                                            <path opacity="0.5"
+                                                d="M14 20.8344C13.3663 20.9421 12.695 21 12 21C8.13401 21 5 19.2091 5 17C5 14.7909 8.13401 13 12 13C13.7135 13 15.2832 13.3518 16.5 13.9359"
+                                                stroke="#1C274C" stroke-width="1.5"></path>
+                                        </g>
+                                    </svg>
+                                    <span>ایجاد صندوق جدید</span>
+                                </a>
+                            </li>
+                            <li class="nav-item {% if current_view == 'create_transaction' %}active{% endif %}">
+                                <a class="nav-link" href="{% url 'transaction' %}">
+                                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                        <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round">
+                                        </g>
+                                        <g id="SVGRepo_iconCarrier">
+                                            <path opacity="0.5" d="M10 14H12M12 14H14M12 14V16M12 14V12"
+                                                stroke="#1C274C" stroke-width="1.5" stroke-linecap="round"></path>
+                                            <path
+                                                d="M2 6.94975C2 6.06722 2 5.62595 2.06935 5.25839C2.37464 3.64031 3.64031 2.37464 5.25839 2.06935C5.62595 2 6.06722 2 6.94975 2C7.33642 2 7.52976 2 7.71557 2.01738C8.51665 2.09229 9.27652 2.40704 9.89594 2.92051C10.0396 3.03961 10.1763 3.17633 10.4497 3.44975L11 4C11.8158 4.81578 12.2237 5.22367 12.7121 5.49543C12.9804 5.64471 13.2651 5.7626 13.5604 5.84678C14.0979 6 14.6747 6 15.8284 6H16.2021C18.8345 6 20.1506 6 21.0062 6.76946C21.0849 6.84024 21.1598 6.91514 21.2305 6.99383C22 7.84935 22 9.16554 22 11.7979V14C22 17.7712 22 19.6569 20.8284 20.8284C19.6569 22 17.7712 22 14 22H10C6.22876 22 4.34315 22 3.17157 20.8284C2 19.6569 2 17.7712 2 14V6.94975Z"
+                                                stroke="#1C274C" stroke-width="1.5"></path>
+                                        </g>
+                                    </svg>
+                                    <span>ایجاد تراکنش</span>
+                                </a>
+                            </li>
+                            <li class="nav-item {% if current_view == 'create_tag' %}active{% endif %}">
+                                <a class="nav-link" href="{% url 'create_tag' %}">
+                                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                        <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round">
+                                        </g>
+                                        <g id="SVGRepo_iconCarrier">
+                                            <path
+                                                d="M4.72848 16.1369C3.18295 14.5914 2.41018 13.8186 2.12264 12.816C1.83509 11.8134 2.08083 10.7485 2.57231 8.61875L2.85574 7.39057C3.26922 5.59881 3.47597 4.70292 4.08944 4.08944C4.70292 3.47597 5.59881 3.26922 7.39057 2.85574L8.61875 2.57231C10.7485 2.08083 11.8134 1.83509 12.816 2.12264C13.8186 2.41018 14.5914 3.18295 16.1369 4.72848L17.9665 6.55812C20.6555 9.24711 22 10.5916 22 12.2623C22 13.933 20.6555 15.2775 17.9665 17.9665C15.2775 20.6555 13.933 22 12.2623 22C10.5916 22 9.24711 20.6555 6.55812 17.9665L4.72848 16.1369Z"
+                                                stroke="#1C274C" stroke-width="1.5"></path>
+                                            <circle opacity="0.5" cx="8.60699" cy="8.87891" r="2"
+                                                transform="rotate(-45 8.60699 8.87891)" stroke="#1C274C"
+                                                stroke-width="1.5"></circle>
+                                            <path opacity="0.5" d="M11.5417 18.5L18.5208 11.5208" stroke="#1C274C"
+                                                stroke-width="1.5" stroke-linecap="round"></path>
+                                        </g>
+                                    </svg>
+                                    <span>مدیریت تگ</span>
+                                </a>
+                            </li>
+                            {% if request.user.is_authenticated %}
+                            <!-- <li class="nav-item {% if current_view == 'create_tag' %}active{% endif %}">
+                                <a class="nav-link" href="{% url 'logout' %}">
+                                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                        <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round">
+                                        </g>
+                                        <g id="SVGRepo_iconCarrier">
+                                            <path
+                                                d="M4.72848 16.1369C3.18295 14.5914 2.41018 13.8186 2.12264 12.816C1.83509 11.8134 2.08083 10.7485 2.57231 8.61875L2.85574 7.39057C3.26922 5.59881 3.47597 4.70292 4.08944 4.08944C4.70292 3.47597 5.59881 3.26922 7.39057 2.85574L8.61875 2.57231C10.7485 2.08083 11.8134 1.83509 12.816 2.12264C13.8186 2.41018 14.5914 3.18295 16.1369 4.72848L17.9665 6.55812C20.6555 9.24711 22 10.5916 22 12.2623C22 13.933 20.6555 15.2775 17.9665 17.9665C15.2775 20.6555 13.933 22 12.2623 22C10.5916 22 9.24711 20.6555 6.55812 17.9665L4.72848 16.1369Z"
+                                                stroke="#1C274C" stroke-width="1.5"></path>
+                                            <circle opacity="0.5" cx="8.60699" cy="8.87891" r="2"
+                                                transform="rotate(-45 8.60699 8.87891)" stroke="#1C274C"
+                                                stroke-width="1.5"></circle>
+                                            <path opacity="0.5" d="M11.5417 18.5L18.5208 11.5208" stroke="#1C274C"
+                                                stroke-width="1.5" stroke-linecap="round"></path>
+                                        </g>
+                                    </svg>
+                                    <span>خروج</span>
+                                </a>
+                            </li>
+                            <li class="nav-item {% if current_view == 'create_tag' %}active{% endif %}">
+                                <a class="nav-link" href="#">
+                                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                        <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round">
+                                        </g>
+                                        <g id="SVGRepo_iconCarrier">
+                                            <path
+                                                d="M4.72848 16.1369C3.18295 14.5914 2.41018 13.8186 2.12264 12.816C1.83509 11.8134 2.08083 10.7485 2.57231 8.61875L2.85574 7.39057C3.26922 5.59881 3.47597 4.70292 4.08944 4.08944C4.70292 3.47597 5.59881 3.26922 7.39057 2.85574L8.61875 2.57231C10.7485 2.08083 11.8134 1.83509 12.816 2.12264C13.8186 2.41018 14.5914 3.18295 16.1369 4.72848L17.9665 6.55812C20.6555 9.24711 22 10.5916 22 12.2623C22 13.933 20.6555 15.2775 17.9665 17.9665C15.2775 20.6555 13.933 22 12.2623 22C10.5916 22 9.24711 20.6555 6.55812 17.9665L4.72848 16.1369Z"
+                                                stroke="#1C274C" stroke-width="1.5"></path>
+                                            <circle opacity="0.5" cx="8.60699" cy="8.87891" r="2"
+                                                transform="rotate(-45 8.60699 8.87891)" stroke="#1C274C"
+                                                stroke-width="1.5"></circle>
+                                            <path opacity="0.5" d="M11.5417 18.5L18.5208 11.5208" stroke="#1C274C"
+                                                stroke-width="1.5" stroke-linecap="round"></path>
+                                        </g>
+                                    </svg>
+                                    <span>{{ request.user.username }}</span>
+                                </a>
+                            </li> -->
+                            {% endif %}
+                        </ul>
+                        {% if request.user.is_authenticated %}
+                        <!-- Avatar -->
+                        <div class="dropdown profile-dropdown d-none d-lg-flex">
+                            <a data-mdb-dropdown-init
+                                class="dropdown-toggle d-flex align-items-center hidden-arrow gap-1" href="#"
+                                id="navbarDropdownMenuAvatar" role="button" aria-expanded="false">
+                                <span class="profile-username">{{ request.user.username }}</span>
+                                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                    <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                                    <g id="SVGRepo_iconCarrier">
+                                        <circle opacity="0.5" cx="12" cy="9" r="3" stroke="#1C274C" stroke-width="1.5">
+                                        </circle>
+                                        <circle cx="12" cy="12" r="10" stroke="#1C274C" stroke-width="1.5"></circle>
+                                        <path opacity="0.5"
+                                            d="M17.9691 20C17.81 17.1085 16.9247 15 11.9999 15C7.07521 15 6.18991 17.1085 6.03076 20"
+                                            stroke="#1C274C" stroke-width="1.5" stroke-linecap="round"></path>
+                                    </g>
+                                </svg>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuAvatar">
+                                <li>
+                                    <a class="dropdown-item" href="{% url 'logout' %}">خروج</a>
+                                </li>
+                            </ul>
+                        </div>
+                        {% endif %}
+                    </div>
+                    <!-- Left links -->
+                </div>
+                <!-- Collapsible wrapper -->
+        </div>
+        </nav>
+    </div>
+    </div>
+</header>

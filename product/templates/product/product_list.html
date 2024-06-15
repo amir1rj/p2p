@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>All Products</title>
+</head>
+<body>
+<h1>All Products</h1>
+<p>Found {{ products.count }} products</p>
+
+<!-- Filter Form -->
+<form method="get">
+    {{ filter.form.as_p }}
+    <button type="submit">Filter</button>
+</form>
+
+<!-- Sort Form -->
+<form method="get">
+    <label for="sort">Sort by:</label>
+    <select name="sort" id="sort" onchange="this.form.submit()">
+        <option value="newest" {% if request.GET.sort == 'newest' %}selected{% endif %}>Newest</option>
+        <option value="oldest" {% if request.GET.sort == 'oldest' %}selected{% endif %}>Oldest</option>
+        <option value="random" {% if request.GET.sort == 'random' %}selected{% endif %}>Random</option>
+        <option value="quantity_asc" {% if request.GET.sort == 'quantity_asc' %}selected{% endif %}>Quantity (Ascending)</option>
+        <option value="quantity_desc" {% if request.GET.sort == 'quantity_desc' %}selected{% endif %}>Quantity (Descending)</option>
+    </select>
+</form>
+
+<!-- Product List -->
+<ul>
+    {% for product in products %}
+        <li>
+            <h2>{{ product.title }}</h2>
+            <p>{{ product.description }}</p>
+            <p>Price: {{ product.price }}</p>
+            <p>Category: {% for category in product.category.all %}{{ category.title }}{% if not forloop.last %}, {% endif %}{% endfor %}</p>
+            <p>Vendor: {{ product.vendor.user.username }}</p>
+            <p>Quantity: {{ product.quantity }} {{ product.unit.title }}</p>
+            <p>Source: {{ product.src.title }}</p>
+            <p>Destination: {{ product.dst.title }}</p>
+            <p>Type: {{ product.type }}</p> <!-- Product Type -->
+        </li>
+    {% endfor %}
+</ul>
+
+<!-- Pagination -->
+{% if is_paginated %}
+    <div class="pagination">
+        <span class="step-links">
+            {% if page_obj.has_previous %}
+                <a href="?page={{ page_obj.previous_page_number }}&{{ request.GET.urlencode }}">&laquo; previous</a>
+            {% endif %}
+
+            <span class="current">
+                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+            </span>
+
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}&{{ request.GET.urlencode }}">next &raquo;</a>
+            {% endif %}
+        </span>
+    </div>
+{% endif %}
+</body>
+</html>

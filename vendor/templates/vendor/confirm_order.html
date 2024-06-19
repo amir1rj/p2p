@@ -17,6 +17,10 @@
     <button type="submit" name="action" value="approve">Approve</button>
     <button type="submit" name="action" value="reject">Reject</button>
 </form>
-
+{% if order.status == "approved" or order.status == "delayed" %}
+    {% if request.user == order.product.vendor.user %}
+        <a href="{% url 'orders:delay' order.id %}">Delay Order</a>
+    {% endif %}
+{% endif %}
 </body>
 </html>

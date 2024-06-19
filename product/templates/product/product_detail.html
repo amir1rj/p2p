@@ -10,7 +10,8 @@
 <p>Status: {{ product.get_status_display }}</p>
 <p>Quantity: {{ product.quantity }}</p>
 <p>Category:
-    {% for category in product.category.all %}{{ category.title }}{% if not forloop.last %}, {% endif %}{% endfor %}</p>
+    {% for category in product.category.all %}{{ category.title }}{% if not forloop.last %}, {% endif %}{% endfor %}
+</p>
 <p>Unit: {{ product.unit.title }}</p>
 <p>Source: {{ product.src.title }}</p>
 <p>Destination: {{ product.dst.title }}</p>
@@ -28,13 +29,15 @@
         <img src="{{ image.image.url }}" alt="{{ product.title }}">
     {% endfor %}
 </div>
-<h2>Order this product</h2>
-<form method="post" action="{% url 'orders:create' product.id %}">
-    {% csrf_token %}
-    <label for="quantity">Quantity:</label>
-    <input type="number" name="quantity" id="quantity" min="1" max="{{ product.quantity }}">
-    <button type="submit">Create Order</button>
-</form>
+
+<h2><a href="{% url 'orders:create' product.id %}"> Order this product</a></h2>
+{#<form method="post" action="{% url 'orders:create' product.id %}">#}
+{#    {% csrf_token %}#}
+{#    <label for="quantity">Quantity:</label>#}
+{#    <input type="number" name="quantity" id="quantity" min="1" max="{{ product.quantity }}" required>#}
+{#    #}
+{#    <button type="submit">Create Order</button>#}
+{#</form>#}
 
 </body>
 </html>

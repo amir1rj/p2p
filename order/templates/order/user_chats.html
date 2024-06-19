@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>chat list</title>
+</head>
+<body>
+<h2>My Chats</h2>
+<ul>
+    {% for chat in chats %}
+    <li><a href="{% url 'orders:chat_detail' chat.id %}">{{ chat }}</a></li>
+{#    <li><a href="#">{{ chat }}</a></li>#}
+    {% endfor %}
+</ul>
+
+</body>
+</html>

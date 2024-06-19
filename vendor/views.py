@@ -5,7 +5,7 @@ from django.views.generic import CreateView, FormView
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-from order.models import Order, Freeze_money
+from order.models import Order, Freeze_money, Chat, Message
 from p2p.settings import SITE_PROFIT_PERCENT_VENDOR
 from .models import Vendor, VendorImage
 from .forms import VendorApplicationForm, VendorImageForm
@@ -68,7 +68,7 @@ class ConfirmOrderView(LoginRequiredMixin, View):
             # Add balance to vendor
 
             real_price = order.quantity * order.product.price
-            Freeze_money.objects.create(order=order,value=real_price - (real_price / SITE_PROFIT_PERCENT_VENDOR))
+            Freeze_money.objects.create(order=order, value=real_price - (real_price / SITE_PROFIT_PERCENT_VENDOR))
             # order.product.vendor.user.balance += real_price - (real_price / 10)
             # order.product.vendor.user.save()
 
@@ -77,6 +77,9 @@ class ConfirmOrderView(LoginRequiredMixin, View):
             order.product.save()
 
             messages.success(request, "Order approved successfully.")
+            chat, created = Chat.objects.get_or_create(vendor=order.product.vendor, user=order.user)
+            Message.objects.create(chat=chat, author=request.user,
+                                   content=f"Hi {order.user.profile.profile_name}, I have approved your order.")
         elif action == "reject":
             order.status = "rejected"
             messages.success(request, "Order rejected successfully.")

@@ -5,7 +5,7 @@ from django.views.generic import CreateView, ListView, UpdateView, DetailView
 from django_filters.views import FilterView
 
 from product.filters import ProductFilter
-from product.forms import ProductForm, InformationFormSet, ProductUpdateForm
+from product.forms import ProductForm, InformationFormSet, ProductUpdateForm, ShippingOptionsFormSet
 from product.models import Product, Image, ProductChangeRequest
 
 
@@ -13,11 +13,9 @@ class ProductCreateView(LoginRequiredMixin, CreateView):
     model = Product
     form_class = ProductForm
     template_name = 'product/product_form.html'
-    # success_url = reverse_lazy('vendor_products')
     success_url = '/'
 
     def dispatch(self, *args, **kwargs):
-        # Check if the user is an active vendor
         if not hasattr(self.request.user, 'vendor') or self.request.user.vendor.status != 'active':
             return redirect('not_authorized')
         return super().dispatch(self.request, *args, **kwargs)
@@ -26,14 +24,17 @@ class ProductCreateView(LoginRequiredMixin, CreateView):
         context = super().get_context_data(**kwargs)
         if self.request.POST:
             context['information_formset'] = InformationFormSet(self.request.POST)
+            context['shipping_options_formset'] = ShippingOptionsFormSet(self.request.POST)
         else:
             context['information_formset'] = InformationFormSet()
+            context['shipping_options_formset'] = ShippingOptionsFormSet()
         return context
 
     def form_valid(self, form):
         context = self.get_context_data()
         information_formset = context['information_formset']
-        if information_formset.is_valid():
+        shipping_options_formset = context['shipping_options_formset']
+        if information_formset.is_valid() and shipping_options_formset.is_valid():
             form.instance.vendor = self.request.user.vendor
             response = super().form_valid(form)
 
@@ -50,6 +51,10 @@ class ProductCreateView(LoginRequiredMixin, CreateView):
             # Save the information formset
             information_formset.instance = self.object
             information_formset.save()
+
+            # Save the shipping options formset
+            shipping_options_formset.instance = self.object
+            shipping_options_formset.save()
 
             # Call the custom method to add parent categories
             self.object.add_parent_categories()
@@ -105,7 +110,8 @@ class ProductUpdateView(LoginRequiredMixin, UpdateView):
     def get_object(self, queryset=None):
         product_slug = self.kwargs['slug']
         product = get_object_or_404(Product, slug=product_slug)
-        change_request = ProductChangeRequest.objects.filter(product=product, vendor=self.request.user.vendor, request_status='pending').last()
+        change_request = ProductChangeRequest.objects.filter(product=product, vendor=self.request.user.vendor,
+                                                             request_status='pending').last()
         if change_request:
             return change_request
         return ProductChangeRequest(

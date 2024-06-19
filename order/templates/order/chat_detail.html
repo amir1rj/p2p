@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h2>Chat with {{ chat.vendor }}</h2>
+<div>
+    {% for message in messages %}
+    <div>
+        <strong>{{ message.author }}</strong>: {{ message.content }} <em>{{ message.create_datetime }}</em>
+    </div>
+    {% endfor %}
+</div>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Send</button>
+</form>
+
+<a href="{% url 'orders:user_chats' %}">Back to chats</a>
+</body>
+</html>

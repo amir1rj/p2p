@@ -17,17 +17,34 @@
 <p>Quantity: {{ order.quantity }}</p>
 <p>Total Price: ${{ order.total_price }}</p>
 <p>Status: {{ order.get_status_display }}</p>
+<p>Shipping Option: {{ order.shipping_option.text }}</p>
 
+{% if order.shipping_details %}
+    <h2>Shipping Details</h2>
+    <p>Type: {{ order.shipping_details.type }}</p>
+    <p>Address: {{ order.shipping_details.address }}</p>
+    <p>City: {{ order.shipping_details.city }}</p>
+    <p>State: {{ order.shipping_details.state }}</p>
+    <p>Country: {{ order.shipping_details.country }}</p>
+    <p>Zipcode: {{ order.shipping_details.zipcode }}</p>
+    <p>Phone: {{ order.shipping_details.phone }}</p>
+    <p>Email: {{ order.shipping_details.email }}</p>
+    <p>Description: {{ order.shipping_details.description }}</p>
+    {% if order.shipping_details.auth_info %}
+        <p>Auth Info: {{ order.shipping_details.auth_info }}</p>
+    {% endif %}
+    {% if order.shipping_details.account_address %}
+        <p>Account Address: {{ order.shipping_details.account_address }}</p>
+    {% endif %}
+{% endif %}
 
 <form method="post" action="{% url 'orders:detail' order.id %}">
     {% csrf_token %}
-    {#        <input type="hidden" name="status" value="confirmed">#}
-    {#        <button type="submit">Confirm Order</button>#}
     {% if order.status == "pending" %}
-        <button type="submit" name="action" value="confirmed">confirm</button>
+        <button type="submit" name="action" value="confirmed">Confirm Order</button>
     {% endif %}
     {% if order.status == "approved" %}
-        <button type="submit" name="action" value="completed">complete order</button>
+        <button type="submit" name="action" value="completed">Complete Order</button>
     {% endif %}
 </form>
 
@@ -37,4 +54,10 @@
         <button type="submit">Cancel Order</button>
     </form>
 {% endif %}
+{% if order.status == "approved" or order.status == "delayed" %}
+    {% if request.user == order.product.vendor.user or request.user == order.user %}
+        <a href="{% url 'orders:delay' order.id %}">Delay Order</a>
+    {% endif %}
+{% endif %}
 </body>
+</html>

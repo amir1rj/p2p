@@ -2,14 +2,30 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Create Order</title>
 </head>
 <body>
+<h1>Create Order for {{ product.title }}</h1>
+
 <form method="post">
     {% csrf_token %}
+
     <label for="quantity">Quantity:</label>
     <input type="number" name="quantity" id="quantity" min="1" max="{{ product.quantity }}">
+
+    <label for="shipping_option">Shipping Option:</label>
+    <select name="shipping_option" id="shipping_option">
+        {% for option in shipping_options %}
+            <option value="{{ option.id }}">{{ option.text }}</option>
+        {% endfor %}
+    </select>
+
+    <hr>
+    <h2>Shipping Details</h2>
+    {{ form.as_p }}
+
     <button type="submit">Create Order</button>
 </form>
+
 </body>
 </html>

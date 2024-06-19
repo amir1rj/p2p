@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from order.models import Order, Freeze_money
+from order.models import Order, Freeze_money, Shipping_details, Chat, Message
 from product.models import Product
 
 
@@ -12,3 +12,6 @@ class OrderAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Freeze_money)
+admin.site.register(Shipping_details)
+admin.site.register(Chat)
+admin.site.register(Message)

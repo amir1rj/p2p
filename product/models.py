@@ -121,10 +121,18 @@ class Place(BaseModel):
         super().save(*args, **kwargs)
 
 
+class Shipping_options(BaseModel):
+    product = models.ForeignKey('Product', on_delete=models.CASCADE, related_name="shipping_options")
+    text = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.text
+
+
 class ProductChangeRequest(BaseModel):
     vendor = models.ForeignKey(Vendor, on_delete=models.CASCADE, related_name="change_requests")
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="change_requests")
-    title = models.CharField(max_length=30)
+    title = models.CharField(max_length=60)
     description = models.TextField()
     price = models.IntegerField()
     is_promoted = models.BooleanField(default=False)

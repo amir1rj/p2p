@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Delay Order</title>
+</head>
+<body>
+<h1>Delay Order</h1>
+
+<!-- Display messages to the user -->
+{% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+{% endif %}
+
+<p>Product: {{ order.product.title }}</p>
+<p>Quantity: {{ order.quantity }}</p>
+<p>Total Price: ${{ order.total_price }}</p>
+<p>Status: {{ order.get_status_display }}</p>
+
+<form method="post" action="{% url 'orders:delay' order.id %}">
+    {% csrf_token %}
+    <label for="delay_days">Delay Period (in days):</label>
+    <input type="number" name="delay_days" id="delay_days" required>
+    <button type="submit">Submit</button>
+</form>
+
+</body>
+</html>

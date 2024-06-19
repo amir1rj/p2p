@@ -1,5 +1,5 @@
 from django import forms
-from .models import Product, Information, Category, ProductChangeRequest
+from .models import Product, Information, Category, ProductChangeRequest, Shipping_options
 from django.forms import inlineformset_factory
 
 
@@ -26,4 +26,12 @@ class InformationForm(forms.ModelForm):
         fields = ['text']
 
 
+class ShippingOptionsForm(forms.ModelForm):
+    class Meta:
+        model = Shipping_options
+        fields = ['text']
+
+
+ShippingOptionsFormSet = inlineformset_factory(Product, Shipping_options, form=ShippingOptionsForm, extra=3,
+                                               can_delete=True)
 InformationFormSet = inlineformset_factory(Product, Information, form=InformationForm, extra=3, can_delete=True)

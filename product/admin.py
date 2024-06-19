@@ -1,6 +1,6 @@
 from rangefilter.filters import NumericRangeFilter, DateRangeFilter
 
-from .models import Information, Image, Product, Category, Place, Unit, ProductChangeRequest
+from .models import Information, Image, Product, Category, Place, Unit, ProductChangeRequest, Shipping_options
 from django.contrib import admin
 
 
@@ -51,12 +51,16 @@ class InformationInline(admin.StackedInline):
     model = Information
 
 
+class ShippingOptionInline(admin.TabularInline):
+    model = Shipping_options
+
+
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
     list_display = ("title", "price")
     list_editable = ("price",)
     search_fields = ("title",)
-    inlines = (ImageInline, InformationInline)
+    inlines = (ImageInline, InformationInline,ShippingOptionInline)
     list_display_links = ("title",)
 
 

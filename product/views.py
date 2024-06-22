@@ -1,11 +1,12 @@
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect, get_object_or_404
+from django.views import View
 from django.views.generic import CreateView, ListView, UpdateView, DetailView
 from django_filters.views import FilterView
 
 from product.filters import ProductFilter
-from product.forms import ProductForm, InformationFormSet, ProductUpdateForm, ShippingOptionsFormSet
+from product.forms import ProductForm, InformationFormSet, ProductUpdateForm, ShippingOptionsForm
 from product.models import Product, Image, ProductChangeRequest
 
 
@@ -15,26 +16,28 @@ class ProductCreateView(LoginRequiredMixin, CreateView):
     template_name = 'product/product_form.html'
     success_url = '/'
 
-    def dispatch(self, *args, **kwargs):
-        if not hasattr(self.request.user, 'vendor') or self.request.user.vendor.status != 'active':
+    def dispatch(self, request, *args, **kwargs):
+        if not hasattr(request.user, 'vendor') or request.user.vendor.status != 'active':
             return redirect('not_authorized')
-        return super().dispatch(self.request, *args, **kwargs)
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['vendor'] = self.request.user.vendor
+        return kwargs
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         if self.request.POST:
             context['information_formset'] = InformationFormSet(self.request.POST)
-            context['shipping_options_formset'] = ShippingOptionsFormSet(self.request.POST)
         else:
             context['information_formset'] = InformationFormSet()
-            context['shipping_options_formset'] = ShippingOptionsFormSet()
         return context
 
     def form_valid(self, form):
         context = self.get_context_data()
         information_formset = context['information_formset']
-        shipping_options_formset = context['shipping_options_formset']
-        if information_formset.is_valid() and shipping_options_formset.is_valid():
+        if information_formset.is_valid():
             form.instance.vendor = self.request.user.vendor
             response = super().form_valid(form)
 
@@ -52,17 +55,12 @@ class ProductCreateView(LoginRequiredMixin, CreateView):
             information_formset.instance = self.object
             information_formset.save()
 
-            # Save the shipping options formset
-            shipping_options_formset.instance = self.object
-            shipping_options_formset.save()
-
             # Call the custom method to add parent categories
             self.object.add_parent_categories()
 
             return response
         else:
             return self.render_to_response(self.get_context_data(form=form))
-
 
 class VendorProductListView(LoginRequiredMixin, ListView):
     model = Product
@@ -178,3 +176,18 @@ class ProductDetailView(DetailView):
     context_object_name = 'product'
     slug_field = 'slug'
     slug_url_kwarg = 'slug'
+
+
+class ShippingOptionCreateView(LoginRequiredMixin, View):
+    def get(self, request, *args, **kwargs):
+        form = ShippingOptionsForm()
+        return render(request, "product/shipping_option_form.html", {'form': form})
+
+    def post(self, request, *args, **kwargs):
+        form = ShippingOptionsForm(request.POST)
+        if form.is_valid():
+            shipping_options = form.save(commit=False)
+            shipping_options.vendor = request.user.vendor
+            shipping_options.save()
+            return redirect('/')
+        return render(request, "product/shipping_option_form.html", {'form': form})

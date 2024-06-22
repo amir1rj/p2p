@@ -35,9 +35,10 @@ class Order(BaseModel):
     def __str__(self):
         return f"{self.user} ordered - {self.quantity} - {self.product} - price= {self.total_price}"
 
-    def save(self, *args, **kwargs):
-        self.total_price = (self.quantity * self.product.price) + (
-                (self.quantity * self.product.price) / SITE_PROFIT_PERCENT_USER)
+    def save(self, *args, recalculate_total=True, **kwargs):
+        if recalculate_total:
+            self.total_price = (self.quantity * self.product.price) + self.shipping_option.price + (
+                    (self.quantity * self.product.price) / SITE_PROFIT_PERCENT_USER)
         super().save(*args, **kwargs)
 
     def is_finalized(self):

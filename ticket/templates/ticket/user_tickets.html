@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>My Tickets</title>
+</head>
+<body>
+<h2>My Tickets</h2>
+<ul>
+    {% for ticket in tickets %}
+    <li><a href="{% url 'tickets:ticket_detail' ticket.id %}">{{ ticket.subject }} - {{ ticket.status }}</a></li>
+    {% endfor %}
+</ul>
+
+</body>
+</html>

@@ -13,11 +13,7 @@
     {% for form in information_formset %}
         {{ form.as_p }}
     {% endfor %}
-    <h3>Shipping Options</h3>
-    {{ shipping_options_formset.management_form }}
-    {% for form in shipping_options_formset %}
-        {{ form.as_p }}
-    {% endfor %}
+
     <button type="submit">Create Product</button>
 </form>
 </body>

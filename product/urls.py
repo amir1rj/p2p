@@ -2,7 +2,7 @@ from django.urls import path
 from django.views.generic import TemplateView
 
 from .views import ProductCreateView, ProductListView, ProductUpdateView, review_change_requests, \
-    approve_change_request, reject_change_request, ProductDetailView
+    approve_change_request, reject_change_request, ProductDetailView, ShippingOptionCreateView
 
 urlpatterns = [
     path('create/', ProductCreateView.as_view(), name='create_product'),
@@ -13,4 +13,5 @@ urlpatterns = [
     path('not-authorized/', TemplateView.as_view(template_name='product/not_authorized.html'), name='not_authorized'),
     path('list/', ProductListView.as_view(), name='product_list'),
     path('<slug:slug>/', ProductDetailView.as_view(), name='product_detail'),
+    path('shipping_options/create/', ShippingOptionCreateView.as_view(), name='create_shipping_option'),
 ]

@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'vendor.apps.VendorConfig',
     'product.apps.ProductConfig',
     'order.apps.OrderConfig',
+    'ticket.apps.TicketConfig',
     # third party
     'django_filters',
     'rangefilter'
@@ -144,4 +145,5 @@ MEDIA_URL = "media/"
 STATICFILES_DIRS = [os.path.join(BASE_DIR, "statics")]
 # setting
 SITE_PROFIT_PERCENT_USER = 10
-SITE_PROFIT_PERCENT_VENDOR =10
+SITE_PROFIT_PERCENT_VENDOR = 10
+DAY_TO_CLOSE_TICKET =3

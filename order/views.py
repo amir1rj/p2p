@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
 from django.shortcuts import render, get_object_or_404, redirect
@@ -8,7 +10,7 @@ from django.views.generic import ListView, DetailView
 from order.forms import ShippingDetailsForm, MessageForm
 from order.models import Order, Chat
 from p2p.settings import SITE_PROFIT_PERCENT_USER
-from product.models import Product, Shipping_options
+from product.models import Product, Shipping_options, Coupon
 
 
 class CreateOrderView(LoginRequiredMixin, View):
@@ -88,7 +90,10 @@ class CreateOrderView(LoginRequiredMixin, View):
 class OrderDetailView(LoginRequiredMixin, View):
     def get(self, request, order_id):
         order = get_object_or_404(Order, id=order_id)
-        return render(request, "order/order_detail.html", {"order": order})
+        product_price = order.product.price * order.quantity
+        return render(request, "order/order_detail.html",
+                      {"order": order, "shipping_price": order.shipping_option.price,
+                       "site_profit": product_price / SITE_PROFIT_PERCENT_USER})
 
     def post(self, request, order_id):
         order = get_object_or_404(Order, id=order_id)
@@ -111,6 +116,27 @@ class OrderDetailView(LoginRequiredMixin, View):
             order.product.vendor.user.save()
             order.save()
             messages.success(request, "Order confirmed successfully.")
+
+        elif action == "apply_coupon":
+            coupon_code = request.POST.get("coupon_code")
+            coupon = Coupon.objects.filter(code=coupon_code).first()
+            if coupon:
+                is_valid = coupon.is_valid(user=request.user.id,order=order)
+                if is_valid["bool"]:
+                    discount = Decimal(coupon.amount)
+                    if coupon.type == 'percent':
+                        discount = (order.total_price * discount) / 100
+                    discount = min(discount, Decimal(coupon.max_value))
+                    order.total_price -= discount
+                    order.total_price = order.total_price.quantize(Decimal('0.01'))
+
+                    coupon.use_coupon(request.user.id)
+                    order.save(recalculate_total=False)
+                    messages.success(request, "Coupon applied successfully.")
+                else:
+                    messages.error(request, is_valid["msg"])
+            else:
+                messages.error(request, "Invalid coupon code.")
 
         return redirect("orders:detail", order_id=order.id)
 

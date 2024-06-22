@@ -68,7 +68,9 @@ class ConfirmOrderView(LoginRequiredMixin, View):
             # Add balance to vendor
 
             real_price = order.quantity * order.product.price
-            Freeze_money.objects.create(order=order, value=real_price - (real_price / SITE_PROFIT_PERCENT_VENDOR))
+            shipping_price = order.shipping_option.price
+            Freeze_money.objects.create(order=order,
+                                        value=real_price - (real_price / SITE_PROFIT_PERCENT_VENDOR) + shipping_price)
             # order.product.vendor.user.balance += real_price - (real_price / 10)
             # order.product.vendor.user.save()
 
